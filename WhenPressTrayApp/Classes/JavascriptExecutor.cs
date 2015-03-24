@@ -94,6 +94,10 @@ namespace WhenPressTrayApp {
 			this.engine.AddHostObject(
 				"WhenPress",
 				new JavascriptHostObject());
+
+			this.engine.AddHostObject(
+				"Config",
+				this.configEntry.Parameters);
 		}
 
 		/// <summary>
