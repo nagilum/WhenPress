@@ -91,10 +91,6 @@ namespace WhenPressTrayApp {
 				"DialogResult",
 				typeof(DialogResult));
 
-			this.engine.AddHostType(
-				"ProcessWindowStyle",
-				typeof(ProcessWindowStyle));
-
 			this.engine.AddHostObject(
 				"WhenPress",
 				new JavascriptHostObject());
