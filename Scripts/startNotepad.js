@@ -8,4 +8,8 @@
 
 'use strict';
 
+// Start an instance of Notepad.
 WhenPress.Start('notepad.exe');
+
+// Start an instance of Notepad and attempt to open the file 'test.txt'.
+WhenPress.Start('notepad.exe', 'test.txt');
