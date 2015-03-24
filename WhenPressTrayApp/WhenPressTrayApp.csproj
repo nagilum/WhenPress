@@ -50,7 +50,9 @@
   <ItemGroup>
     <Compile Include="Classes\ConfigEntry.cs" />
     <Compile Include="Classes\KeyboardHook.cs" />
-    <Compile Include="Classes\WhenPressMenuItem.cs" />
+    <Compile Include="Classes\WhenPressMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="fmTray.cs">
       <SubType>Form</SubType>
     </Compile>
