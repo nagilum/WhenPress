@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace WhenPressTrayApp {
 	/// <summary>
@@ -18,7 +19,7 @@ namespace WhenPressTrayApp {
 		/// <summary>
 		/// A list of parameters to pass along to the script.
 		/// </summary>
-		// public string Parameters { get; set; }
+		public Dictionary<string, string> Parameters { get; set; }
 
 		/// <summary>
 		/// Path and file to the script to execute.
