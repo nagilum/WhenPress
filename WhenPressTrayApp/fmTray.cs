@@ -31,7 +31,9 @@ namespace WhenPressTrayApp {
 			if (entry == null)
 				return;
 
-			MessageBox.Show(entry.ScriptFile);
+			// Attempt to execute the code!
+			new JavascriptExecutor(
+				entry);
 		}
 
 		private void miExecuteScript_Click(object sender, EventArgs e) {
@@ -40,7 +42,9 @@ namespace WhenPressTrayApp {
 			if (menuItem == null)
 				return;
 
-			MessageBox.Show(menuItem.ConfigEntry.ScriptFile);
+			// Attempt to execute the code!
+			new JavascriptExecutor(
+				menuItem.ConfigEntry);
 		}
 
 		private void miAbout_Click(object sender, EventArgs e) {
