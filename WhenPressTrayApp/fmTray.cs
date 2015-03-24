@@ -69,9 +69,26 @@ namespace WhenPressTrayApp {
 		/// Remove all traces of config, reload config and re-apply.
 		/// </summary>
 		private void loadConfig() {
-			// Load and parse the JSON file.
 			var filename = Application.ExecutablePath.Substring(0, Application.ExecutablePath.Length - 4) + ".json";
 
+			// Check if the file exists.
+			if (!File.Exists(filename)) {
+				const string url = "https://github.com/nagilum/WhenPress";
+				var retval = MessageBox.Show(
+					"First time running?\r\n\r\n" +
+					"Check out the documentation over at " + url + " to see how you can get it up and running.\r\n\r\n" +
+					"Go there now?",
+					"First time?",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Question);
+
+				if (retval == DialogResult.Yes)
+					System.Diagnostics.Process.Start(url);
+
+				return;
+			}
+
+			// Load and parse the JSON file.
 			try {
 				var temp = new JavaScriptSerializer().Deserialize<List<ConfigEntry>>(File.ReadAllText(filename));
 				this.entries = temp;

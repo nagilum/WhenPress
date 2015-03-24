@@ -63,11 +63,13 @@
 			this.miScripts.Name = "miScripts";
 			this.miScripts.Size = new System.Drawing.Size(149, 22);
 			this.miScripts.Text = "Scripts";
+			this.miScripts.Visible = false;
 			// 
 			// miSeparatorScripts
 			// 
 			this.miSeparatorScripts.Name = "miSeparatorScripts";
 			this.miSeparatorScripts.Size = new System.Drawing.Size(146, 6);
+			this.miSeparatorScripts.Visible = false;
 			// 
 			// miAbout
 			// 
