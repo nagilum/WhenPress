@@ -19,3 +19,7 @@ var dialogResult = WhenPress.ShowMessageBox(
 WhenPress.ShowMessageBox(
   dialogResult,
   'You pressed');
+
+if (dialogResult == DialogResult.Yes) {
+  // Perform some fancy shit when the user presses 'Yes'!
+}
