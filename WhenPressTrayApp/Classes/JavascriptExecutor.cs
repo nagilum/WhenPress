@@ -1,8 +1,10 @@
-﻿using Microsoft.ClearScript;
+﻿using System.Text;
+using Microsoft.ClearScript;
 using Microsoft.ClearScript.V8;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace WhenPressTrayApp {
@@ -95,9 +97,10 @@ namespace WhenPressTrayApp {
 				"WhenPress",
 				new JavascriptHostObject());
 
-			this.engine.AddHostObject(
-				"Config",
-				this.configEntry.Parameters);
+			if (this.configEntry.Parameters != null)
+				this.engine.AddHostObject(
+					"Config",
+					this.configEntry.Parameters);
 		}
 
 		/// <summary>
@@ -134,6 +137,46 @@ namespace WhenPressTrayApp {
 	/// Object available inside the script.
 	/// </summary>
 	public class JavascriptHostObject {
+		[DllImport("user32.dll")]
+		private static extern IntPtr GetForegroundWindow();
+
+		[DllImport("user32.dll")]
+		private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+		/// <summary>
+		/// Get the handle of the active window.
+		/// </summary>
+		public IntPtr GetActiveWindowHandle() {
+			return GetForegroundWindow();
+		}
+
+		/// <summary>
+		/// Get the title of the active window.
+		/// </summary>
+		public string GetActiveWindowTitle() {
+			const int chars = 256;
+			var handle = GetForegroundWindow();
+			var buff = new StringBuilder(chars);
+
+			GetWindowText(handle, buff, chars);
+
+			return buff.ToString();
+		}
+
+		/// <summary>
+		/// Send key-strokes and bail out.
+		/// </summary>
+		public void SendKeyPress(string keys) {
+			SendKeys.Send(keys);
+		}
+
+		/// <summary>
+		/// Send key-strokes and wait for the process to finish.
+		/// </summary>
+		public void SendKeyPressWait(string keys) {
+			SendKeys.SendWait(keys);
+		}
+
 		/// <summary>
 		/// Display a message-box with just a message.
 		/// </summary>
