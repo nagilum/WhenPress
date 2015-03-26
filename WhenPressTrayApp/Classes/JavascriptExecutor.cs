@@ -1,10 +1,12 @@
-﻿using System.Text;
-using Microsoft.ClearScript;
+﻿using Microsoft.ClearScript;
 using Microsoft.ClearScript.V8;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace WhenPressTrayApp {
@@ -56,9 +58,15 @@ namespace WhenPressTrayApp {
 			catch (ScriptEngineException ex) {
 				MessageBox.Show(
 					"Error while running script!\r\n\r\n" +
+					"File:\r\n" +
 					this.configEntry.ScriptFile + "\r\n\r\n" +
-					ex.Message,
-					"Error",
+					"Exception:\r\n" +
+					ex.Message + "\r\n\r\n" +
+					"Data:\r\n" +
+					ex.Data + "\r\n\r\n" +
+					"ErrorDetails:\r\n" +
+					ex.ErrorDetails + "\r\n\r\n",
+					"ScriptEngineException",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
 			}
@@ -67,7 +75,7 @@ namespace WhenPressTrayApp {
 					"Error while running script!\r\n\r\n" +
 					this.configEntry.ScriptFile + "\r\n\r\n" +
 					ex.Message,
-					"Error",
+					"Exception",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
 			}
@@ -95,12 +103,9 @@ namespace WhenPressTrayApp {
 
 			this.engine.AddHostObject(
 				"WhenPress",
-				new JavascriptHostObject());
-
-			if (this.configEntry.Parameters != null)
-				this.engine.AddHostObject(
-					"Config",
-					this.configEntry.Parameters);
+				new JavascriptHostObject(
+					this.configEntry.Parameters,
+					this.engine));
 		}
 
 		/// <summary>
@@ -143,6 +148,42 @@ namespace WhenPressTrayApp {
 		[DllImport("user32.dll")]
 		private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
+		[DllImport("User32.dll")]
+		private static extern IntPtr SetForegroundWindow(IntPtr hWnd);
+
+		/// <summary>
+		/// A list of parameters from the config.
+		/// </summary>
+		private readonly Dictionary<string, string> configParameters;
+
+		/// <summary>
+		/// The executing engine.
+		/// </summary>
+		private readonly V8ScriptEngine engine;
+
+		/// <summary>
+		/// Constructor!
+		/// </summary>
+		public JavascriptHostObject(Dictionary<string, string> configParameters, V8ScriptEngine engine) {
+			this.configParameters = configParameters;
+			this.engine = engine;
+		}
+
+		/// <summary>
+		/// Bring a window to the foreground based on the window handle.
+		/// </summary>
+		public void FocusWindowByHandle(IntPtr handle) {
+			SetForegroundWindow(handle);
+		}
+
+		/// <summary>
+		/// Bring a window to the foreground based on parts of its main window title.
+		/// </summary>
+		public void FocusWindowByTitle(string title) {
+			foreach (var process in Process.GetProcesses().Where(process => process.MainWindowTitle.ToLower().IndexOf(title.ToLower(), StringComparison.CurrentCulture) != -1))
+				SetForegroundWindow(process.MainWindowHandle);
+		}
+
 		/// <summary>
 		/// Get the handle of the active window.
 		/// </summary>
@@ -161,6 +202,27 @@ namespace WhenPressTrayApp {
 			GetWindowText(handle, buff, chars);
 
 			return buff.ToString();
+		}
+
+		/// <summary>
+		/// Get a value from the config parameters.
+		/// </summary>
+		public string GetConfigValue(string name) {
+			return (from cf in this.configParameters where cf.Key == name select cf.Value).FirstOrDefault();
+		}
+
+		/// <summary>
+		/// Get a list of all processes.
+		/// </summary>
+		public object GetProcesses() {
+			return Process.GetProcesses().ToScriptArray(this.engine);
+		}
+
+		/// <summary>
+		/// Get a list of processes filtered by name.
+		/// </summary>
+		public object GetProcessesByName(string name) {
+			return Process.GetProcessesByName(name).ToScriptArray(this.engine);
 		}
 
 		/// <summary>
@@ -246,6 +308,16 @@ namespace WhenPressTrayApp {
 			};
 
 			process.Start();
+		}
+	}
+
+	public static class ScriptHelpers {
+		public static object ToScriptArray<T>(this IEnumerable<T> source, V8ScriptEngine engine) {
+			dynamic array = engine.Evaluate("[]");
+			foreach (var element in source) {
+				array.push(element);
+			}
+			return array;
 		}
 	}
 }
