@@ -21,6 +21,6 @@ processes.forEach(function (process) {
 });
 
 if (handle)
-  WhenPress.FocusWindowByTitle(title);
+  WhenPress.FocusWindowByHandle(handle);
 else
   WhenPress.Start(fileName);

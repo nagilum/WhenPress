@@ -172,8 +172,18 @@ namespace WhenPressTrayApp {
 		/// <summary>
 		/// Bring a window to the foreground based on the window handle.
 		/// </summary>
-		public void FocusWindowByHandle(IntPtr handle) {
-			SetForegroundWindow(handle);
+		public void FocusWindowByHandle(object handle) {
+			int tempI;
+
+			if (!int.TryParse(handle.ToString(), out tempI))
+				return;
+
+			var tempP = new IntPtr(tempI);
+
+			if (tempP == IntPtr.Zero)
+				return;
+
+			SetForegroundWindow(tempP);
 		}
 
 		/// <summary>
