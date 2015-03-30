@@ -148,6 +148,9 @@ namespace WhenPressTrayApp {
 		[DllImport("user32.dll")]
 		private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
+		[DllImport("user32.dll")]
+		private static extern int SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
+
 		[DllImport("User32.dll")]
 		private static extern IntPtr SetForegroundWindow(IntPtr hWnd);
 
@@ -247,6 +250,56 @@ namespace WhenPressTrayApp {
 		/// </summary>
 		public void SendKeyPressWait(string keys) {
 			SendKeys.SendWait(keys);
+		}
+
+		/// <summary>
+		/// Send a message directly to a window using the Win32 API.
+		/// </summary>
+		public void SendWin32Message(object hWnd, object wMsg, object wParam, object lParam) {
+			int ihWnd;
+			if (!int.TryParse(hWnd.ToString(), out ihWnd))
+				return;
+
+			var swMsg = wMsg.ToString();
+			int iwMsg;
+
+			if (swMsg.StartsWith("0x")) {
+				swMsg = swMsg.Substring(2);
+				int.TryParse(swMsg, System.Globalization.NumberStyles.HexNumber, null, out iwMsg);
+			}
+			else {
+				int.TryParse(swMsg, out iwMsg);
+			}
+
+			var swParam = wParam.ToString();
+			int iwParam;
+
+			if (swParam.StartsWith("0x")) {
+				swParam = swParam.Substring(2);
+				int.TryParse(swParam, System.Globalization.NumberStyles.HexNumber, null, out iwParam);
+			}
+			else {
+				int.TryParse(swParam, out iwParam);
+			}
+
+			var slParam = lParam.ToString();
+			int ilParam;
+
+			if (slParam.StartsWith("0x")) {
+				slParam = slParam.Substring(2);
+				int.TryParse(slParam, System.Globalization.NumberStyles.HexNumber, null, out ilParam);
+			}
+			else {
+				int.TryParse(slParam, out ilParam);
+			}
+
+			var iphWnd = new IntPtr(ihWnd);
+
+			SendMessage(
+				iphWnd,
+				iwMsg,
+				iwParam,
+				ilParam);
 		}
 
 		/// <summary>
