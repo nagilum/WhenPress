@@ -30,10 +30,11 @@
 			this.miScripts = new System.Windows.Forms.ToolStripMenuItem();
 			this.miSeparatorScripts = new System.Windows.Forms.ToolStripSeparator();
 			this.miAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.miSeparatorAbout = new System.Windows.Forms.ToolStripSeparator();
 			this.miReloadConfig = new System.Windows.Forms.ToolStripMenuItem();
 			this.miExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.niTray = new System.Windows.Forms.NotifyIcon(this.components);
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.miStartAtWindowsLogin = new System.Windows.Forms.ToolStripMenuItem();
 			this.cmTray.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -51,49 +52,45 @@
 			this.cmTray.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miScripts,
             this.miSeparatorScripts,
-            this.miAbout,
-            this.miSeparatorAbout,
+            this.miStartAtWindowsLogin,
             this.miReloadConfig,
+            this.toolStripSeparator1,
+            this.miAbout,
             this.miExit});
 			this.cmTray.Name = "cmTray";
-			this.cmTray.Size = new System.Drawing.Size(150, 104);
+			this.cmTray.Size = new System.Drawing.Size(199, 148);
 			// 
 			// miScripts
 			// 
 			this.miScripts.Name = "miScripts";
-			this.miScripts.Size = new System.Drawing.Size(149, 22);
+			this.miScripts.Size = new System.Drawing.Size(198, 22);
 			this.miScripts.Text = "Scripts";
 			this.miScripts.Visible = false;
 			// 
 			// miSeparatorScripts
 			// 
 			this.miSeparatorScripts.Name = "miSeparatorScripts";
-			this.miSeparatorScripts.Size = new System.Drawing.Size(146, 6);
+			this.miSeparatorScripts.Size = new System.Drawing.Size(195, 6);
 			this.miSeparatorScripts.Visible = false;
 			// 
 			// miAbout
 			// 
 			this.miAbout.Name = "miAbout";
-			this.miAbout.Size = new System.Drawing.Size(149, 22);
+			this.miAbout.Size = new System.Drawing.Size(198, 22);
 			this.miAbout.Text = "About";
 			this.miAbout.Click += new System.EventHandler(this.miAbout_Click);
-			// 
-			// miSeparatorAbout
-			// 
-			this.miSeparatorAbout.Name = "miSeparatorAbout";
-			this.miSeparatorAbout.Size = new System.Drawing.Size(146, 6);
 			// 
 			// miReloadConfig
 			// 
 			this.miReloadConfig.Name = "miReloadConfig";
-			this.miReloadConfig.Size = new System.Drawing.Size(149, 22);
+			this.miReloadConfig.Size = new System.Drawing.Size(198, 22);
 			this.miReloadConfig.Text = "Reload Config";
 			this.miReloadConfig.Click += new System.EventHandler(this.miReloadConfig_Click);
 			// 
 			// miExit
 			// 
 			this.miExit.Name = "miExit";
-			this.miExit.Size = new System.Drawing.Size(149, 22);
+			this.miExit.Size = new System.Drawing.Size(198, 22);
 			this.miExit.Text = "Exit";
 			this.miExit.Click += new System.EventHandler(this.miExit_Click);
 			// 
@@ -103,6 +100,18 @@
 			this.niTray.Icon = ((System.Drawing.Icon)(resources.GetObject("niTray.Icon")));
 			this.niTray.Text = "WhenPress";
 			this.niTray.Visible = true;
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(195, 6);
+			// 
+			// miStartAtWindowsLogin
+			// 
+			this.miStartAtWindowsLogin.Name = "miStartAtWindowsLogin";
+			this.miStartAtWindowsLogin.Size = new System.Drawing.Size(198, 22);
+			this.miStartAtWindowsLogin.Text = "Start av Windows Login";
+			this.miStartAtWindowsLogin.Click += new System.EventHandler(this.miStartAtWindowsLogin_Click);
 			// 
 			// fmTray
 			// 
@@ -129,10 +138,11 @@
 		private System.Windows.Forms.ToolStripMenuItem miScripts;
 		private System.Windows.Forms.ToolStripSeparator miSeparatorScripts;
 		private System.Windows.Forms.ToolStripMenuItem miAbout;
-		private System.Windows.Forms.ToolStripSeparator miSeparatorAbout;
 		private System.Windows.Forms.ToolStripMenuItem miReloadConfig;
 		private System.Windows.Forms.ToolStripMenuItem miExit;
 		private System.Windows.Forms.NotifyIcon niTray;
+		private System.Windows.Forms.ToolStripMenuItem miStartAtWindowsLogin;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 	}
 }
 

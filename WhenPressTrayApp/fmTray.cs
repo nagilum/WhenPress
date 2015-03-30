@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace WhenPressTrayApp {
 	public partial class fmTray : Form {
@@ -20,6 +21,9 @@ namespace WhenPressTrayApp {
 
 			// Remove all traces of config, reload config and re-apply.
 			this.loadConfig();
+
+			// Check if the program is set to start at Windows login.
+			this.checkForWindowsLogin();
 		}
 
 		private void keyboardHook_KeyPressed(object sender, KeyPressedEventArgs e) {
@@ -47,6 +51,25 @@ namespace WhenPressTrayApp {
 				menuItem.ConfigEntry);
 		}
 
+		private void miStartAtWindowsLogin_Click(object sender, EventArgs e) {
+			var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
+
+			if (key == null)
+				return;
+
+			if (this.miStartAtWindowsLogin.Checked)
+				key.DeleteValue(Application.ProductName);
+			else
+				key.SetValue(Application.ProductName, Application.ExecutablePath);
+
+			this.miStartAtWindowsLogin.Checked = !this.miStartAtWindowsLogin.Checked;
+		}
+
+		private void miReloadConfig_Click(object sender, EventArgs e) {
+			// Remove all traces of config, reload config and re-apply.
+			this.loadConfig();
+		}
+
 		private void miAbout_Click(object sender, EventArgs e) {
 			MessageBox.Show(
 				Application.ProductName + "\r\n" +
@@ -54,11 +77,6 @@ namespace WhenPressTrayApp {
 				"About",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information);
-		}
-
-		private void miReloadConfig_Click(object sender, EventArgs e) {
-			// Remove all traces of config, reload config and re-apply.
-			this.loadConfig();
 		}
 
 		private void miExit_Click(object sender, EventArgs e) {
@@ -141,6 +159,26 @@ namespace WhenPressTrayApp {
 					this.miSeparatorScripts.Visible = true;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Check if the program is set to start at Windows login.
+		/// </summary>
+		private void checkForWindowsLogin() {
+			var regkey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
+
+			if (regkey == null)
+				return;
+
+			var value = regkey.GetValue(Application.ProductName);
+
+			if (value == null)
+				return;
+
+			var value_ins = value.ToString();
+
+			if (value_ins != "0")
+				this.miStartAtWindowsLogin.Checked = true;
 		}
 	}
 }
